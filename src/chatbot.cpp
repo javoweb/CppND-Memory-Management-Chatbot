@@ -46,14 +46,11 @@ ChatBot::~ChatBot() {
 ChatBot::ChatBot(ChatBot &other) {
   std::cout << "Chatbot Copy Constructor" << std::endl;
   // Copying references
-  other._currentNode = _currentNode;
-  other._rootNode = _rootNode;
-  other._chatLogic = _chatLogic;
-  other._image = _image;
-  // Invalidate data handles
-  _image = NULL;
-  _chatLogic = nullptr;
-  _rootNode = nullptr;
+  _currentNode = other._currentNode;
+  _rootNode = other._rootNode;
+  _chatLogic = other._chatLogic;
+  _image = new wxBitmap;
+  *_image = *other._image;
 }
 
 // Copy assingment using exclusive ownership
@@ -64,20 +61,16 @@ ChatBot &ChatBot::operator=(ChatBot &other) {
     return *this;
   }
   // deallocate heap memory
-  if (other._image != NULL &&
-      other._image != nullptr) // check if memory is allocated
+  if (_image != NULL && _image != nullptr) // check if memory is allocated
   {
-    delete other._image;
+    delete _image;
   }
   // Copying references
-  other._currentNode = _currentNode;
-  other._rootNode = _rootNode;
-  other._chatLogic = _chatLogic;
-  other._image = _image;
-  // Invalidate data handles
-  _image = NULL;
-  _chatLogic = nullptr;
-  _rootNode = nullptr;
+  _currentNode = other._currentNode;
+  _rootNode = other._rootNode;
+  _chatLogic = other._chatLogic;
+  _image = new wxBitmap;
+  *_image = *other._image;
   return *this;
 }
 
@@ -85,14 +78,16 @@ ChatBot &ChatBot::operator=(ChatBot &other) {
 ChatBot::ChatBot(ChatBot &&other) {
   std::cout << "Chatbot Move Constructor" << std::endl;
   // Copying references
-  other._currentNode = _currentNode;
-  other._rootNode = _rootNode;
-  other._chatLogic = _chatLogic;
-  other._image = _image;
+  _currentNode = other._currentNode;
+  _rootNode = other._rootNode;
+  _chatLogic = other._chatLogic;
+  _image = other._image;
+  _chatLogic->SetChatbotHandle(this);
   // Invalidate data handles
-  _image = NULL;
-  _chatLogic = nullptr;
-  _rootNode = nullptr;
+  other._image = NULL;
+  other._chatLogic = nullptr;
+  other._rootNode = nullptr;
+  other._currentNode = nullptr;
 }
 
 // Move assingment using exclusive ownership
@@ -103,20 +98,21 @@ ChatBot &ChatBot::operator=(ChatBot &&other) {
     return *this;
   }
   // deallocate heap memory
-  if (other._image != NULL &&
-      other._image != nullptr) // check if memory is allocated
+  if (_image != NULL && _image != nullptr) // check if memory is allocated
   {
-    delete other._image;
+    delete _image;
   }
   // Copying references
-  other._currentNode = _currentNode;
-  other._rootNode = _rootNode;
-  other._chatLogic = _chatLogic;
-  other._image = _image;
+  _currentNode = other._currentNode;
+  _rootNode = other._rootNode;
+  _chatLogic = other._chatLogic;
+  _image = other._image;
+  _chatLogic->SetChatbotHandle(this);
   // Invalidate data handles
-  _image = NULL;
-  _chatLogic = nullptr;
-  _rootNode = nullptr;
+  other._image = NULL;
+  other._chatLogic = nullptr;
+  other._rootNode = nullptr;
+  other._currentNode = nullptr;
   return *this;
 }
 ////
